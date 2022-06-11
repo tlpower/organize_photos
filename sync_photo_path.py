@@ -1,8 +1,9 @@
 import os
 import exifread
-import imghdr
 import shutil
 import grp, pwd, time
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
 
 #要迁移的照片，${synology_user_name}为synology的用户名
 scanPath = "/var/services/homes/${synology_user_name}/photo"
@@ -33,9 +34,17 @@ def syncFilePath(file):
 
         toNewFile = os.path.join(toPath, dateTimeOriginal[0:4], dateTimeOriginal[5:7], fileName)
     elif fileSuffix in ('mp4', 'mov'):
+        #取文件修改时间
+        '''
         timeInfo = time.localtime(os.stat(file).st_mtime)
         toNewFile = os.path.join(toPath, time.strftime('%Y', timeInfo), time.strftime('%m', timeInfo), fileName)
+        '''
+        #取媒体拍摄时间
+        metadata = extractMetadata(createParser(file))
+        metaCreateDate = metadata.get('creation_date')
+        toNewFile = os.path.join(toPath, str(metaCreateDate.year), str(metaCreateDate.month).zfill(2), fileName)
     else:
+        print(file, "该文件类型不能处理，跳过")
         return 0
 
     #如果变更后的文件地址跟现在一样，那就不处理
@@ -55,7 +64,9 @@ def syncFilePath(file):
     shutil.move(file, toNewFile)
     print(file, toNewFile)
     #如果源目录是群晖的相册目录，删除用于全局搜索的系统文件
-    shutil.rmtree(os.path.join(filePath, "@eaDir", fileName))
+    eaDir = os.path.join(filePath, "@eaDir", fileName)
+    if os.path.exists(eaDir):
+        shutil.rmtree(eaDir)
     return 1
 
 def scan():
