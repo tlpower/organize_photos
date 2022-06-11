@@ -3,8 +3,10 @@ import exifread
 import imghdr
 import shutil
 
-scanPath = "/var/services/homes/tlpower/Photos/PhotoLibrary/2018/11"
-toPath = "/var/services/homes/tlpower/Photos/PhotoLibrary/"
+#要迁移的照片，${synology_user_name}为synology的用户名
+scanPath = "/var/services/homes/${synology_user_name}/photo"
+#迁移照片的目的地，${synology_user_name}为synology的用户名
+toPath = "/var/services/homes/${synology_user_name}/Photos/PhotoLibrary/"
 
 def fixFilePath(file):
     global toPath
