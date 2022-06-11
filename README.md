@@ -4,7 +4,7 @@
 
 执行前，需要先执行安装一个Python Module
 ```linux
-pip install exifread
+pip install exifread,hachoir
 ```
 
 然后需要改一下文件里的配置，设置好scanPath和toPath
