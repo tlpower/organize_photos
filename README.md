@@ -1,6 +1,6 @@
 在搭群晖之前，我们通常会手动备份手机里的照片。
 有了群晖以后，我们除了用Synology photos备份手机里的照片以外，还希望把以前手动保存的照片放到Synology photos相册里来。
-这个Python文件主要是用于将自动保存的照片按Synology photos的目录格式迁移过来。
+这个Python程序主要是用于将手动保存的照片按Synology photos的目录格式迁移过来。
 
 # 前期准备
 执行前，需要先执行安装一个Python Module
