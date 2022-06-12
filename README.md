@@ -49,9 +49,15 @@ pip install exifread,hachoir,pyexiv2
 其它详情参考这里： [pyexiv2-Tutorial-cn.md](https://github.com/LeoHsiao1/pyexiv2/blob/master/docs/Tutorial-cn.md)
 
 # 执行
-需要改一下文件里的配置，设置好scanPath和toPath
-scanPath：表示你需要从哪个目录迁移照片到Synology photos
-toPath：表示Synology photos照片库地址
+1. 使用终端工具SSH进入群晖
+> 进入群晖DSM，打开控制面板->终端机和SNMP->终端机->勾选“启动SSH功能”
+2. SSH连接并切换至root用户
+```shell
+sudo -i
+```
+3. 修改python文件里的配置，设置好scanPath和toPath
+> scanPath：表示你需要从哪个目录迁移照片到Synology photos  
+> toPath：表示Synology photos照片库地址
 执行：
 ```py
 python sync_photo_path.py
