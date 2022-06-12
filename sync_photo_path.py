@@ -1,19 +1,25 @@
-import os
+import os,sys,shutil,grp, pwd, configparser
 import exifread
-import shutil
-import grp, pwd, time
 import xml.dom.minidom
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-# from pyexiv2 import Image
 from PIL import Image
-from PIL.PngImagePlugin import PngImageFile
 
+configParser = configparser.ConfigParser()
+configParser.read('./config.ini', encoding='utf-8')
 
-#要迁移的照片，${synology_user_name}为synology的用户名
-scanPath = "/var/services/homes/${synology_user_name}/photo"
-#迁移照片的目的地，${synology_user_name}为synology的用户名
-toPath = "/var/services/homes/${synology_user_name}/Photos/PhotoLibrary/"
+if not configParser.has_section('path'):
+    print('请在config.ini中配置[path]并配置scan_path和to_path信息')
+    sys.exit()
+
+itemsDict = dict(configParser.items('path'))
+
+if not itemsDict or 'scan_path' not in itemsDict or 'to_path' not in itemsDict:
+    print('请在config.ini中配置scan_path和to_path，指定扫描路径和目的地路径')
+    sys.exit()
+
+scanPath = itemsDict['scan_path']
+toPath = itemsDict['to_path']
 
 def syncFilePath(file):
     global toPath
