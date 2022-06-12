@@ -64,6 +64,10 @@ def syncFilePath(file):
     if file == toNewFile:
         return 0
 
+    if os.path.exists(toNewFile):
+        print(toNewFile, "跟目的地文件夹中现有文件同名了，过滤不处理")
+        return 0
+
     toNewFilePath = os.path.split(toNewFile)[0]
     if not os.path.exists(toNewFilePath):
         #如果目的地目录不存在，则创建目录，user和group信息用源照片的user和group信息
