@@ -102,4 +102,3 @@ def getxmp(self):
 
 #用于单个文件测试
 #syncFilePath("/var/services/homes/${synology_user_name}/xxx.jpg")
-syncFilePath("/Users/tianliao/Downloads/IMG_1959.PNG")
