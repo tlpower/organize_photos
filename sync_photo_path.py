@@ -107,7 +107,7 @@ def scan():
             result = syncFilePath(file)
 
 #同步指定目录的照片及视频
-# scan()
+scan()
 
 #用于单个文件测试
-syncFilePath("/Users/tianliao/Downloads/IMG_4135.m4v")
+#syncFilePath("/Users/tianliao/Downloads/IMG_4135.m4v")
