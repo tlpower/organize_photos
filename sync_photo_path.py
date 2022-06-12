@@ -44,7 +44,7 @@ def syncFilePath(file):
         dateTimeOriginal = tags[dateKey].values
 
         toNewFile = os.path.join(toPath, dateTimeOriginal[0:4], dateTimeOriginal[5:7], fileName)
-    elif fileSuffix in ('mp4', 'mov'):
+    elif fileSuffix in ('mp4', 'mov', 'm4v'):
         #取媒体拍摄时间
         metadata = extractMetadata(createParser(file))
         metaCreateDate = metadata.get('creation_date')
@@ -107,7 +107,7 @@ def scan():
             result = syncFilePath(file)
 
 #同步指定目录的照片及视频
-scan()
+# scan()
 
 #用于单个文件测试
-#syncFilePath("/var/services/homes/${synology_user_name}/xxx.jpg")
+syncFilePath("/Users/tianliao/Downloads/IMG_4135.m4v")
