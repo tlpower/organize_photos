@@ -1,4 +1,4 @@
-import os,sys,shutil,grp, pwd, configparser
+import os,sys,shutil,grp, pwd, configparser, time
 import exifread
 import xml.dom.minidom
 from hachoir.metadata import extractMetadata
@@ -51,11 +51,17 @@ def syncFilePath(file):
         toNewFile = os.path.join(toPath, str(metaCreateDate.year), str(metaCreateDate.month).zfill(2), fileName)
     elif fileSuffix in ('png'):
         im = Image.open(file)
-        xmlDom = xml.dom.minidom.parseString(im.info.get("XML:com.adobe.xmp"))
-        root = xmlDom.documentElement
-        dateCreatedElement = root.getElementsByTagName('photoshop:DateCreated')
-        pngCreateDate = dateCreatedElement[0].firstChild.data
-        toNewFile = os.path.join(toPath, pngCreateDate[0:4], pngCreateDate[5:7], fileName)
+        if "XML:com.adobe.xmp" in im.info:
+            xmlDom = xml.dom.minidom.parseString(im.info.get("XML:com.adobe.xmp"))
+            root = xmlDom.documentElement
+            dateCreatedElement = root.getElementsByTagName('photoshop:DateCreated')
+            pngCreateDate = dateCreatedElement[0].firstChild.data
+            toNewFile = os.path.join(toPath, pngCreateDate[0:4], pngCreateDate[5:7], fileName)
+        else:
+            #当PNG没有xmp信息时，取文件的修改时间
+            print(file, "没有xmp信息，用了系统修改时间")
+            timeInfo = time.localtime(os.stat(file).st_mtime)
+            toNewFile = os.path.join(toPath, time.strftime('%Y', timeInfo), time.strftime('%m', timeInfo), fileName)
     else:
         print(file, "该文件类型不能处理，跳过")
         return 0
