@@ -18,8 +18,8 @@ if not itemsDict or 'scan_path' not in itemsDict or 'to_path' not in itemsDict:
     print('请在config.ini中配置scan_path和to_path，指定扫描路径和目的地路径')
     sys.exit()
 
-scanPath = itemsDict['scan_path']
-toPath = itemsDict['to_path']
+scanPath = itemsDict['scan_path'].strip('"').strip()
+toPath = itemsDict['to_path'].strip('"').strip()
 
 def syncFilePath(file):
     global toPath
