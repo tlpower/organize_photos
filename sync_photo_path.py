@@ -77,8 +77,8 @@ def syncFilePath(file):
     toNewFilePath = os.path.split(toNewFile)[0]
     if not os.path.exists(toNewFilePath):
         #如果目的地目录不存在，则创建目录，user和group信息用源照片的user和group信息
-        userName = os.popen("ls -al "+file+" |awk '{print $3}'").read().strip()
-        groupName = os.popen("ls -al "+file+" |awk '{print $4}'").read().strip()
+        userName = os.popen("ls -al '"+file+"' |awk '{print $3}'").read().strip()
+        groupName = os.popen("ls -al '"+file+"' |awk '{print $4}'").read().strip()
         uid = pwd.getpwnam(userName).pw_uid
         gid = grp.getgrnam(groupName).gr_gid
         os.makedirs(toNewFilePath)
