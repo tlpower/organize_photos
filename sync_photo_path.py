@@ -98,7 +98,7 @@ def getxmp(self):
                 root = xml.etree.ElementTree.fromstring(xmp_tags)
     return root
 #同步指定目录的照片及视频
-# scan()
+scan()
 
 #用于单个文件测试
 #syncFilePath("/var/services/homes/${synology_user_name}/xxx.jpg")
