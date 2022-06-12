@@ -2,8 +2,13 @@ import os
 import exifread
 import shutil
 import grp, pwd, time
+import xml.dom.minidom
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+# from pyexiv2 import Image
+from PIL import Image
+from PIL.PngImagePlugin import PngImageFile
+
 
 #要迁移的照片，${synology_user_name}为synology的用户名
 scanPath = "/var/services/homes/${synology_user_name}/photo"
@@ -21,7 +26,7 @@ def syncFilePath(file):
 
     #获取新文件的地址及文件名
     fileSuffix = os.path.splitext(fileName)[-1][1:].lower()
-    if fileSuffix in ('jpeg', 'jpg', 'heic', 'png'):
+    if fileSuffix in ('jpeg', 'jpg', 'heic'):
         f = open(file, "rb")
         tags = exifread.process_file(f)
         dateKey = 'EXIF DateTimeOriginal'
@@ -34,15 +39,17 @@ def syncFilePath(file):
 
         toNewFile = os.path.join(toPath, dateTimeOriginal[0:4], dateTimeOriginal[5:7], fileName)
     elif fileSuffix in ('mp4', 'mov'):
-        #取文件修改时间
-        '''
-        timeInfo = time.localtime(os.stat(file).st_mtime)
-        toNewFile = os.path.join(toPath, time.strftime('%Y', timeInfo), time.strftime('%m', timeInfo), fileName)
-        '''
         #取媒体拍摄时间
         metadata = extractMetadata(createParser(file))
         metaCreateDate = metadata.get('creation_date')
         toNewFile = os.path.join(toPath, str(metaCreateDate.year), str(metaCreateDate.month).zfill(2), fileName)
+    elif fileSuffix in ('png'):
+        im = Image.open(file)
+        xmlDom = xml.dom.minidom.parseString(im.info.get("XML:com.adobe.xmp"))
+        root = xmlDom.documentElement
+        dateCreatedElement = root.getElementsByTagName('photoshop:DateCreated')
+        pngCreateDate = dateCreatedElement[0].firstChild.data
+        toNewFile = os.path.join(toPath, pngCreateDate[0:4], pngCreateDate[5:7], fileName)
     else:
         print(file, "该文件类型不能处理，跳过")
         return 0
@@ -83,8 +90,16 @@ def scan():
             file = os.path.join(path, fileName)
             result = syncFilePath(file)
 
+def getxmp(self):
+    for segment, content in self.applist:
+        if segment == 'APP1':
+            marker, xmp_tags = content.rsplit(b'\x00', 1)
+            if marker == b'http://ns.adobe.com/xap/1.0/':
+                root = xml.etree.ElementTree.fromstring(xmp_tags)
+    return root
 #同步指定目录的照片及视频
-scan()
+# scan()
 
 #用于单个文件测试
-#syncFilePath("/var/services/homes/tlpower/Photos/PhotoLibrary/2018/11/IMG_1988.JPG")
+#syncFilePath("/var/services/homes/${synology_user_name}/xxx.jpg")
+syncFilePath("/Users/tianliao/Downloads/IMG_1959.PNG")
