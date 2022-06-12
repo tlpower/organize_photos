@@ -90,13 +90,6 @@ def scan():
             file = os.path.join(path, fileName)
             result = syncFilePath(file)
 
-def getxmp(self):
-    for segment, content in self.applist:
-        if segment == 'APP1':
-            marker, xmp_tags = content.rsplit(b'\x00', 1)
-            if marker == b'http://ns.adobe.com/xap/1.0/':
-                root = xml.etree.ElementTree.fromstring(xmp_tags)
-    return root
 #同步指定目录的照片及视频
 scan()
 
