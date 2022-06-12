@@ -18,9 +18,9 @@ pip install exifread,hachoir,pillow
 ```shell
 sudo -i
 ```
-3. 修改config.ini里的配置，设置好scanPath和toPath
-> scanPath：表示你需要从哪个目录迁移照片到Synology photos  
-> toPath：表示Synology photos照片库地址
+3. 修改config.ini里的配置，设置好scan_path和to_path
+> scan_path：指定从哪个目录整理照片。
+> to_path：指定照片整理到哪个目录。（比如Synology photos的场景就可以指定到用户目录下的Photos/PhotoLibrary/）
 执行：
 ```py
 python sync_photo_path.py
