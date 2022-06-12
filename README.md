@@ -1,3 +1,7 @@
+# 功能说明
+将照片及视频按拍摄日期（非文件的创建时间或者修改时间）进行目录分类
+> 比如scanPath中IMG_1234.JPG是2022年06月08号拍摄，那么照片针对被移动到toPath/2022/06/目录中
+## 典型场景
 在搭群晖之前，我们通常会手动备份手机里的照片。
 有了群晖以后，我们除了用Synology photos备份手机里的照片以外，还希望把以前手动保存的照片放到Synology photos相册里来。
 这个Python程序主要是用于将手动保存的照片按Synology photos的目录格式迁移过来。
@@ -14,7 +18,7 @@ pip install exifread,hachoir,pillow
 ```shell
 sudo -i
 ```
-3. 修改python文件里的配置，设置好scanPath和toPath
+3. 修改config.ini里的配置，设置好scanPath和toPath
 > scanPath：表示你需要从哪个目录迁移照片到Synology photos  
 > toPath：表示Synology photos照片库地址
 执行：
