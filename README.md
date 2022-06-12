@@ -2,13 +2,13 @@
 有了群晖以后，我们除了用Synology photos备份手机里的照片以外，还希望把以前手动保存的照片放到Synology photos相册里来。
 这个Python文件主要是用于将自动保存的照片按Synology photos的目录格式迁移过来。
 
-#前期准备
+# 前期准备
 执行前，需要先执行安装一个Python Module
 ```linux
 pip install exifread,hachoir,pyexiv2
 ```
 
-##可能发生的问题
+## 可能发生的问题
 使用pyexiv2的module时，可能会遇到以下问题：
 - 在 Linux 上使用 pyexiv2 时，你可能遇到以下异常：
   ```py
@@ -48,7 +48,7 @@ pip install exifread,hachoir,pyexiv2
 
 其它详情参考这里： [pyexiv2-Tutorial-cn.md](https://github.com/LeoHsiao1/pyexiv2/blob/master/docs/Tutorial-cn.md)
 
-#执行
+# 执行
 需要改一下文件里的配置，设置好scanPath和toPath
 scanPath：表示你需要从哪个目录迁移照片到Synology photos
 toPath：表示Synology photos照片库地址
