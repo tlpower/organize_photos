@@ -44,7 +44,7 @@ def syncFilePath(file):
 
     #获取新文件的地址及文件名
     fileSuffix = os.path.splitext(fileName)[-1][1:].lower()
-    if fileSuffix in ('jpeg', 'jpg', 'heic'):
+    if fileSuffix in ['jpeg', 'jpg', 'heic']:
         f = open(file, "rb")
         tags = exifread.process_file(f)
         dateKey = 'EXIF DateTimeOriginal'
@@ -57,12 +57,12 @@ def syncFilePath(file):
         dateTimeOriginal = tags[dateKey].values
 
         toNewFile = os.path.join(toPath, dateTimeOriginal[0:4], dateTimeOriginal[5:7], fileName)
-    elif fileSuffix in ('mp4', 'mov', 'm4v'):
+    elif fileSuffix in ['mp4', 'mov', 'm4v']:
         #取媒体拍摄时间
         metadata = extractMetadata(createParser(file))
         metaCreateDate = metadata.get('creation_date')
         toNewFile = os.path.join(toPath, str(metaCreateDate.year), str(metaCreateDate.month).zfill(2), fileName)
-    elif fileSuffix in ('png'):
+    elif fileSuffix in ['png']:
         im = Image.open(file)
         if "XML:com.adobe.xmp" in im.info:
             xmlDom = xml.dom.minidom.parseString(im.info.get("XML:com.adobe.xmp"))
