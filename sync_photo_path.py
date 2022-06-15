@@ -39,6 +39,7 @@ def syncFilePath(file):
 
         #过滤没有拍摄时间的照片
         if dateKey not in tags:
+            print(file, "图片没有拍摄时间，过滤不处理")
             return 0
 
         dateTimeOriginal = tags[dateKey].values
