@@ -20,18 +20,24 @@ if not itemsDict or 'scan_path' not in itemsDict or 'to_path' not in itemsDict:
 
 scanPath = itemsDict['scan_path'].strip('"').strip()
 toPath = itemsDict['to_path'].strip('"').strip()
+
 logPath = "./log"
 if not os.path.exists(logPath):
     os.makedirs(logPath)
 logFile = os.path.join(logPath, time.strftime("%Y%m%d%H%M%S", time.localtime())+".log")
-
 fo = open(logFile, 'a')
+
+def log(*msg):
+    global fo
+    logMsg = ' '.join(msg)
+    fo.write(logMsg+"\n")
+    print(logMsg)
 
 def syncFilePath(file):
     global toPath
 
     if not os.path.exists(file):
-        print(file, "文件不存在")
+        log(file, "文件不存在")
         return 0
 
     filePath, fileName = os.path.split(file)
@@ -45,7 +51,7 @@ def syncFilePath(file):
 
         #过滤没有拍摄时间的照片
         if dateKey not in tags:
-            print(file, "图片没有拍摄时间，过滤不处理")
+            log(file, "图片没有拍摄时间，过滤不处理")
             return 0
 
         dateTimeOriginal = tags[dateKey].values
@@ -66,11 +72,11 @@ def syncFilePath(file):
             toNewFile = os.path.join(toPath, pngCreateDate[0:4], pngCreateDate[5:7], fileName)
         else:
             #当PNG没有xmp信息时，取文件的修改时间
-            print(file, "没有xmp信息，用了系统修改时间")
+            log(file, "没有xmp信息，用了系统修改时间")
             timeInfo = time.localtime(os.stat(file).st_mtime)
             toNewFile = os.path.join(toPath, time.strftime('%Y', timeInfo), time.strftime('%m', timeInfo), fileName)
     else:
-        print(file, "该文件类型不能处理，跳过")
+        log(file, "该文件类型不能处理，跳过")
         return 0
 
     #如果变更后的文件地址跟现在一样，那就不处理
@@ -78,7 +84,7 @@ def syncFilePath(file):
         return 0
 
     if os.path.exists(toNewFile):
-        print(toNewFile, "跟目的地文件夹中现有文件同名了，过滤不处理")
+        log(toNewFile, "跟目的地文件夹中现有文件同名了，过滤不处理")
         return 0
 
     toNewFilePath = os.path.split(toNewFile)[0]
@@ -92,7 +98,7 @@ def syncFilePath(file):
         os.chown(toNewFilePath, uid, gid)
 
     shutil.move(file, toNewFile)
-    print(file, toNewFile)
+    log(file, toNewFile)
     #如果源目录是群晖的相册目录，删除用于全局搜索的系统文件
     eaDir = os.path.join(filePath, "@eaDir", fileName)
     if os.path.exists(eaDir):
@@ -113,14 +119,10 @@ def scan():
             file = os.path.join(path, fileName)
             result = syncFilePath(file)
 
-def log(msg):
-    global fo
-    fo.write(msg+"\n")
-    print(msg)
-
 #同步指定目录的照片及视频
 scan()
-fo.close()
 
 #用于单个文件测试
 #syncFilePath("/path/test/IMG_4135.m4v")
+
+fo.close()
