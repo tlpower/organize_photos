@@ -20,6 +20,12 @@ if not itemsDict or 'scan_path' not in itemsDict or 'to_path' not in itemsDict:
 
 scanPath = itemsDict['scan_path'].strip('"').strip()
 toPath = itemsDict['to_path'].strip('"').strip()
+logPath = "./log"
+if not os.path.exists(logPath):
+    os.makedirs(logPath)
+logFile = os.path.join(logPath, time.strftime("%Y%m%d%H%M%S", time.localtime())+".log")
+
+fo = open(logFile, 'a')
 
 def syncFilePath(file):
     global toPath
@@ -107,8 +113,14 @@ def scan():
             file = os.path.join(path, fileName)
             result = syncFilePath(file)
 
+def log(msg):
+    global fo
+    fo.write(msg+"\n")
+    print(msg)
+
 #同步指定目录的照片及视频
 scan()
+fo.close()
 
 #用于单个文件测试
 #syncFilePath("/path/test/IMG_4135.m4v")
