@@ -47,14 +47,17 @@ def syncFilePath(file):
     if fileSuffix in ['jpeg', 'jpg', 'heic']:
         f = open(file, "rb")
         tags = exifread.process_file(f)
-        dateKey = 'EXIF DateTimeOriginal'
-
+        exifDateKey = 'EXIF DateTimeOriginal'
+        imageDateKey = 'Image DateTime'
         #过滤没有拍摄时间的照片
-        if dateKey not in tags:
-            log(file, "图片没有拍摄时间，过滤不处理")
-            return 0
-
-        dateTimeOriginal = tags[dateKey].values
+        if exifDateKey not in tags:
+            if imageDateKey not in tags:
+                log(file, "图片没有拍摄时间，过滤不处理")
+                return 0
+            else:
+                dateTimeOriginal = tags[imageDateKey].values
+        else:
+            dateTimeOriginal = tags[exifDateKey].values
 
         toNewFile = os.path.join(toPath, dateTimeOriginal[0:4], dateTimeOriginal[5:7], fileName)
     elif fileSuffix in ['mp4', 'mov', 'm4v']:
