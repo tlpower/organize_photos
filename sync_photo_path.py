@@ -63,6 +63,9 @@ def syncFilePath(file):
     elif fileSuffix in ['mp4', 'mov', 'm4v']:
         #取媒体拍摄时间
         metadata = extractMetadata(createParser(file))
+        if (not metadata):
+            log(file, "解析失败，无法处理")
+            return 0
         metaCreateDate = metadata.get('creation_date')
         toNewFile = os.path.join(toPath, str(metaCreateDate.year), str(metaCreateDate.month).zfill(2), fileName)
     elif fileSuffix in ['png']:
