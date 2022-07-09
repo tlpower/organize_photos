@@ -44,7 +44,7 @@ def syncFilePath(file):
 
     #获取新文件的地址及文件名
     fileSuffix = os.path.splitext(fileName)[-1][1:].lower()
-    if fileSuffix in ['jpeg', 'jpg', 'heic']:
+    if fileSuffix in ['jpeg', 'jpg', 'heic', 'nef']:
         f = open(file, "rb")
         tags = exifread.process_file(f)
         exifDateKey = 'EXIF DateTimeOriginal'
