@@ -60,7 +60,7 @@ def syncFilePath(file):
             dateTimeOriginal = tags[exifDateKey].values
 
         toNewFile = os.path.join(toPath, dateTimeOriginal[0:4], dateTimeOriginal[5:7], fileName)
-    elif fileSuffix in ['mp4', 'mov', 'm4v']:
+    elif fileSuffix in ['mp4', 'mov', 'm4v', '3gp']:
         #取媒体拍摄时间
         metadata = extractMetadata(createParser(file))
         if (not metadata):
